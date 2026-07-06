@@ -21,7 +21,6 @@
     const container = document.getElementById('{{ uniq_id }}');
 
     const calendar = new FullCalendar.Calendar(container, {
-      //plugins: [ dayGridPlugin, timeGridPlugin, listPlugin ],
       initialView: 'dayGridMonth',
       events: "{{ path('calendar_events_json') }}",
       headerToolbar: {
