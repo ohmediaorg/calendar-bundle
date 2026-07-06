@@ -18,10 +18,10 @@ class CalendarPass implements CompilerPassInterface
 
         $definition = $container->findDefinition(CalendarManager::class);
 
-        $tagged = $container->findTaggedServiceIds('oh_media_calendar.calendar_event_provider');
+        $tagged = $container->findTaggedServiceIds('oh_media_calendar.calendar_data_provider');
 
         foreach ($tagged as $id => $tags) {
-            $definition->addMethodCall('addCalendarEventProvider', [new Reference($id)]);
+            $definition->addMethodCall('addCalendarDataProvider', [new Reference($id)]);
         }
     }
 }

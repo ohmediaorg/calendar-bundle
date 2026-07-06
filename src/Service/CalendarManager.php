@@ -4,24 +4,24 @@ namespace OHMedia\CalendarBundle\Service;
 
 class CalendarManager
 {
-    private array $calendarEventProviders = [];
+    private array $calendarDataProviders = [];
 
-    public function addCalendarEventProvider(AbstractCalendarEventProvider $calendarEventProvider): self
+    public function addCalendarDataProvider(AbstractCalendarDataProvider $calendarDataProvider): self
     {
-        $this->calendarEventProviders[] = $calendarEventProvider;
+        $this->calendarDataProviders[] = $calendarDataProvider;
 
         return $this;
     }
 
-    public function getJson(
+    public function getEventsJson(
         \DateTimeImmutable $start,
         \DateTimeImmutable $end,
         \DateTimeZone $timezone,
-    ) {
+    ): array {
         $json = [];
 
-        foreach ($this->calendarEventProviders as $calendarEventProvider) {
-            $calendarEvents = $calendarEventProvider->getCalendarEvents($start, $end);
+        foreach ($this->calendarDataProviders as $calendarDataProvider) {
+            $calendarEvents = $calendarDataProvider->getCalendarEvents($start, $end);
 
             foreach ($calendarEvents as $calendarEvent) {
                 $eventObject = [
@@ -44,5 +44,30 @@ class CalendarManager
         }
 
         return $json;
+    }
+
+    public function getTags(): array
+    {
+        $tags = [];
+
+        foreach ($this->calendarDataProviders as $calendarDataProvider) {
+            $calendarTags = $calendarDataProvider->getCalendarTags();
+
+            foreach ($calendarTags as $calendarTag) {
+                $tags[] = [
+                    'text' => $calendarTag->text,
+                    'className' => $calendarTag->className,
+                    'backgroundColor' => $calendarTag->backgroundColor,
+                    'borderColor' => $calendarTag->borderColor,
+                    'textColor' => $calendarTag->textColor,
+                ];
+            }
+        }
+
+        usort($tags, function ($a, $b) {
+            return $a['text'] <=> $b['text'];
+        });
+
+        return $tags;
     }
 }

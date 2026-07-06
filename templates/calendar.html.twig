@@ -14,7 +14,37 @@
 
 {% set uniq_id = 'calendar_' ~ uniq() %}
 
-<div id="{{ uniq_id }}"></div>
+{% if tags|length > 0 %}
+  <div id="{{ uniq_id }}_tags" class="calendar-tags">
+    <button
+      class="calendar-tag calendar-tag--selected"
+      style="
+        background-color: blue;
+        border-color: blue;
+        color: white;
+      "
+      data-calendar-tag="ALL"
+    >
+      All
+    </button>
+
+    {% for tag in tags %}
+      <button
+        class="calendar-tag"
+        style="
+          background-color: {{ tag.backgroundColor }};
+          border-color: {{ tag.borderColor }};
+          color: {{ tag.textColor }};
+        "
+        data-calendar-tag="{{ tag.className }}"
+      >
+        {{ tag.text }}
+      </button>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<div id="{{ uniq_id }}" data-calendar-tag="ALL"></div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -31,5 +61,53 @@
     });
 
     calendar.render();
+
+    const allTag = document.querySelector('[data-calendar-tag="ALL"]');
+
+    if (!allTag) {
+      return;
+    }
+
+    const otherTags = document.querySelectorAll('[data-calendar-tag]:not([data-calendar-tag="ALL"])');
+
+    function cleanupTags() {
+      let otherTagSelected = false;
+
+      let tagsSelected =
+
+      otherTags.forEach(function(otherTag) {
+        if (otherTag.classList.contains('calendar-tag--selected')) {
+          otherTagSelected = true;
+        }
+      });
+
+      if (otherTagSelected) {
+        allTag.classList.remove('calendar-tag--selected');
+      } else {
+        allTag.classList.add('calendar-tag--selected');
+      }
+    }
+
+    allTag.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      otherTags.forEach(function(otherTag) {
+        otherTag.classList.remove('calendar-tag--selected');
+      });
+
+      allTag.classList.add('calendar-tag--selected');
+
+      cleanupTags();
+    });
+
+    otherTags.forEach(function(otherTag) {
+      otherTag.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        otherTag.classList.toggle('calendar-tag--selected');
+
+        cleanupTags();
+      });
+    });
   });
 </script>

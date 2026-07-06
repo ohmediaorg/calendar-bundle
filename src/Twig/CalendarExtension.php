@@ -2,6 +2,7 @@
 
 namespace OHMedia\CalendarBundle\Twig;
 
+use OHMedia\CalendarBundle\Service\CalendarManager;
 use OHMedia\WysiwygBundle\Twig\AbstractWysiwygExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
@@ -12,6 +13,7 @@ class CalendarExtension extends AbstractWysiwygExtension
     private bool $includeScripts = true;
 
     public function __construct(
+        private CalendarManager $calendarManager,
         #[Autowire('%oh_media_calendar.theme%')]
         private string $theme,
     ) {
@@ -44,6 +46,7 @@ class CalendarExtension extends AbstractWysiwygExtension
             'include_scripts' => $includeScripts,
             'theme' => $theme,
             'palette' => $palette,
+            'tags' => $this->calendarManager->getTags(),
         ]);
     }
 }

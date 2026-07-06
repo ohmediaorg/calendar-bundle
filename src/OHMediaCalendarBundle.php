@@ -3,7 +3,7 @@
 namespace OHMedia\CalendarBundle;
 
 use OHMedia\CalendarBundle\DependencyInjection\Compiler\CalendarPass;
-use OHMedia\CalendarBundle\Service\AbstractCalendarEventProvider;
+use OHMedia\CalendarBundle\Service\AbstractCalendarDataProvider;
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -60,8 +60,8 @@ class OHMediaCalendarBundle extends AbstractBundle
             ->set('oh_media_calendar.theme', $config['theme'])
         ;
 
-        $containerBuilder->registerForAutoconfiguration(AbstractCalendarEventProvider::class)
-            ->addTag('oh_media_calendar.calendar_event_provider')
+        $containerBuilder->registerForAutoconfiguration(AbstractCalendarDataProvider::class)
+            ->addTag('oh_media_calendar.calendar_data_provider')
         ;
     }
 }
