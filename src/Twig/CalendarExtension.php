@@ -3,12 +3,19 @@
 namespace OHMedia\CalendarBundle\Twig;
 
 use OHMedia\WysiwygBundle\Extension\AbstractWysiwygExtension;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
 use Twig\TwigFunction;
 
 class CalendarExtension extends AbstractWysiwygExtension
 {
-    private bool $includeScript = true;
+    private bool $includeScripts = true;
+
+    public function __construct(
+        #[Autowire('%oh_media_calendar.theme%')]
+        private string $theme,
+    ) {
+    }
 
     public function getFilters(): array
     {
@@ -22,12 +29,21 @@ class CalendarExtension extends AbstractWysiwygExtension
 
     public function calendar(Environment $env): string
     {
-        $includeScript = $this->includeScript;
+        $includeScripts = $this->includeScripts;
 
-        $this->includeScript = false;
+        $this->includeScripts = false;
+
+        if ('classic' === $this->theme) {
+            $theme = $this->theme;
+            $pallette = null;
+        } else {
+            list($theme, $pallette) = explode('-', $this->theme);
+        }
 
         return $env->render('@OHMediaCalendar/calendar.html.twig', [
-            'include_script' => $includeScript,
+            'include_scripts' => $includeScripts,
+            'theme' => $theme,
+            'pallette' => $pallete,
         ]);
     }
 }

@@ -1,5 +1,15 @@
 {% if include_script %}
-<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.21/index.global.min.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/all/global.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/themes/{{ theme }}/global.js"></script>
+
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/skeleton.css' rel='stylesheet' />
+  <link href='https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/themes/{{ theme }}/theme.css' rel='stylesheet' />
+  {% if pallette %}
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/themes/{{ theme }}/palettes/{{ pallette }}.css' rel='stylesheet' />
+  {% else %}
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/themes/{{ theme }}/palette.css' rel='stylesheet' />
+  {% endif %}
 {% endif %}
 
 {% set uniq_id = 'calendar_' ~ uniq() %}
