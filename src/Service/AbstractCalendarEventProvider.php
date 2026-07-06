@@ -15,7 +15,7 @@ abstract class AbstractCalendarEventProvider
 
     final protected function addCalendarEvent(CalendarEvent $calendarEvent): static
     {
-        $this->calendarEvents = $calendarEvent;
+        $this->calendarEvents[] = $calendarEvent;
 
         return $this;
     }

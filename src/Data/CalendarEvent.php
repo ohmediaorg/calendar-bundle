@@ -7,8 +7,8 @@ class CalendarEvent
     public readonly array $classNames;
 
     public function __construct(
-        public readonly \DateTime $start,
-        public readonly \DateTime $end,
+        public readonly \DateTimeInterface $start,
+        public readonly \DateTimeInterface $end,
         public readonly string $title,
         public readonly bool $allDay = false,
         public readonly ?string $url = null,
@@ -16,6 +16,7 @@ class CalendarEvent
         public readonly ?string $borderColor = null,
         public readonly ?string $textColor = null,
     ) {
+        $this->classNames = [];
     }
 
     public function setClassNames(string ...$classNames)

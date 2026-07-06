@@ -2,7 +2,7 @@
 
 namespace OHMedia\CalendarBundle\Twig;
 
-use OHMedia\WysiwygBundle\Extension\AbstractWysiwygExtension;
+use OHMedia\WysiwygBundle\Twig\AbstractWysiwygExtension;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Environment;
 use Twig\TwigFunction;
@@ -17,7 +17,7 @@ class CalendarExtension extends AbstractWysiwygExtension
     ) {
     }
 
-    public function getFilters(): array
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('calendar', [$this, 'calendar'], [
@@ -35,15 +35,15 @@ class CalendarExtension extends AbstractWysiwygExtension
 
         if ('classic' === $this->theme) {
             $theme = $this->theme;
-            $pallette = null;
+            $palette = null;
         } else {
-            list($theme, $pallette) = explode('-', $this->theme);
+            list($theme, $palette) = explode('-', $this->theme);
         }
 
         return $env->render('@OHMediaCalendar/calendar.html.twig', [
             'include_scripts' => $includeScripts,
             'theme' => $theme,
-            'pallette' => $pallete,
+            'palette' => $palette,
         ]);
     }
 }

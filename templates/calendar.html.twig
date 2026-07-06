@@ -1,12 +1,12 @@
-{% if include_script %}
+{% if include_scripts %}
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/all/global.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/themes/{{ theme }}/global.js"></script>
 
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/skeleton.css' rel='stylesheet' />
   <link href='https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/themes/{{ theme }}/theme.css' rel='stylesheet' />
-  {% if pallette %}
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/themes/{{ theme }}/palettes/{{ pallette }}.css' rel='stylesheet' />
+  {% if palette %}
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/themes/{{ theme }}/palettes/{{ palette }}.css' rel='stylesheet' />
   {% else %}
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@7.0.0/themes/{{ theme }}/palette.css' rel='stylesheet' />
   {% endif %}
@@ -21,8 +21,14 @@
     const container = document.getElementById('{{ uniq_id }}');
 
     const calendar = new FullCalendar.Calendar(container, {
-      initialView: 'dayGridMonth'
+      //plugins: [ dayGridPlugin, timeGridPlugin, listPlugin ],
+      initialView: 'dayGridMonth',
       events: "{{ path('calendar_events_json') }}",
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,listWeek'
+      }
     });
 
     calendar.render();

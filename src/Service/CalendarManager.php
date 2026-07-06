@@ -4,11 +4,11 @@ namespace OHMedia\CalendarBundle\Service;
 
 class CalendarManager
 {
-    private array $calendarItemProviders = [];
+    private array $calendarEventProviders = [];
 
-    public function addCalendarItemProvider(AbstractCalendarItemProvider $calendarItemProvider): self
+    public function addCalendarEventProvider(AbstractCalendarEventProvider $calendarEventProvider): self
     {
-        $this->calendarItemProviders[] = $calendarItemProvider;
+        $this->calendarEventProviders[] = $calendarEventProvider;
 
         return $this;
     }
@@ -20,21 +20,26 @@ class CalendarManager
     ) {
         $json = [];
 
-        foreach ($this->calendarItemProviders as $calendarItemProvider) {
-            $calendarEvents = $calendarItemProvider->getCalendarEvents($start, $end);
+        foreach ($this->calendarEventProviders as $calendarEventProvider) {
+            $calendarEvents = $calendarEventProvider->getCalendarEvents($start, $end);
 
             foreach ($calendarEvents as $calendarEvent) {
-                $json[] = [
+                $eventObject = [
                     'allDay' => $calendarEvent->allDay,
-                    'start' => $calendarEvent->start->setTimezone()->format('c'),
-                    'end' => $calendarEvent->end->setTimezone()->format('c'),
+                    'start' => $calendarEvent->start->setTimezone($timezone)->format('c'),
+                    'end' => $calendarEvent->end->setTimezone($timezone)->format('c'),
                     'title' => $calendarEvent->title,
-                    'url' => $calendarEvent->url,
                     'classNames' => $calendarEvent->classNames,
                     'backgroundColor' => $calendarEvent->backgroundColor,
                     'borderColor' => $calendarEvent->borderColor,
                     'textColor' => $calendarEvent->textColor,
                 ];
+
+                if ($calendarEvent->url) {
+                    $eventObject['url'] = $calendarEvent->url;
+                }
+
+                $json[] = $eventObject;
             }
         }
 
