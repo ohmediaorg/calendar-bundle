@@ -18,11 +18,6 @@
   <div id="{{ uniq_id }}_tags" class="calendar-tags">
     <button
       class="calendar-tag calendar-tag--selected"
-      style="
-        background-color: blue;
-        border-color: blue;
-        color: white;
-      "
       data-calendar-tag="ALL"
     >
       All
@@ -32,9 +27,9 @@
       <button
         class="calendar-tag"
         style="
-          background-color: {{ tag.backgroundColor }};
-          border-color: {{ tag.borderColor }};
-          color: {{ tag.textColor }};
+          --calendar-tag-background-color: {{ tag.backgroundColor }};
+          --calendar-tag-border-color: {{ tag.borderColor }};
+          --calendar-tag-color: {{ tag.textColor }};
         "
         data-calendar-tag="{{ tag.className }}"
       >
@@ -42,12 +37,22 @@
       </button>
     {% endfor %}
   </div>
+
+  {% for tag in tags %}
+    <style>
+      #{{ uniq_id }}.{{ tag.className }}--hidden .{{ tag.className }} {
+        display: none;
+      }
+    </style>
+  {% endfor %}
 {% endif %}
 
-<div id="{{ uniq_id }}" data-calendar-tag="ALL"></div>
+<div id="{{ uniq_id }}"></div>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    const SELECTED = 'calendar-tag--selected';
+
     const container = document.getElementById('{{ uniq_id }}');
 
     const calendar = new FullCalendar.Calendar(container, {
@@ -70,43 +75,44 @@
 
     const otherTags = document.querySelectorAll('[data-calendar-tag]:not([data-calendar-tag="ALL"])');
 
-    function cleanupTags() {
-      let otherTagSelected = false;
-
-      let tagsSelected =
-
+    function allTagClick() {
       otherTags.forEach(function(otherTag) {
-        if (otherTag.classList.contains('calendar-tag--selected')) {
-          otherTagSelected = true;
-        }
+        otherTag.classList.remove(SELECTED);
+        container.classList.remove(otherTag.dataset.calendarTag + '--hidden');
       });
 
-      if (otherTagSelected) {
-        allTag.classList.remove('calendar-tag--selected');
-      } else {
-        allTag.classList.add('calendar-tag--selected');
-      }
+      allTag.classList.add(SELECTED);
     }
 
     allTag.addEventListener('click', function(e) {
       e.preventDefault();
 
-      otherTags.forEach(function(otherTag) {
-        otherTag.classList.remove('calendar-tag--selected');
-      });
-
-      allTag.classList.add('calendar-tag--selected');
-
-      cleanupTags();
+      allTagClick();
     });
 
     otherTags.forEach(function(otherTag) {
       otherTag.addEventListener('click', function(e) {
         e.preventDefault();
 
-        otherTag.classList.toggle('calendar-tag--selected');
+        otherTag.classList.toggle(SELECTED);
 
-        cleanupTags();
+        let isAnySelected = false;
+
+        otherTags.forEach(function(otherTag) {
+          if (otherTag.classList.contains(SELECTED)) {
+            isAnySelected = true;
+          }
+        });
+
+        if (isAnySelected) {
+          otherTags.forEach(function(otherTag) {
+            if (!otherTag.classList.contains(SELECTED)) {
+              container.classList.add(otherTag.dataset.calendarTag + '--hidden');
+            }
+          });
+        } else {
+          allTagClick();
+        }
       });
     });
   });

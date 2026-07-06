@@ -29,15 +29,12 @@ class CalendarManager
                     'start' => $calendarEvent->start->setTimezone($timezone)->format('c'),
                     'end' => $calendarEvent->end->setTimezone($timezone)->format('c'),
                     'title' => $calendarEvent->title,
-                    'classNames' => $calendarEvent->classNames,
-                    'backgroundColor' => $calendarEvent->backgroundColor,
-                    'borderColor' => $calendarEvent->borderColor,
-                    'textColor' => $calendarEvent->textColor,
+                    'url' => $calendarEvent->url ?? '',
+                    'className' => implode(' ', $calendarEvent->classNames),
+                    'backgroundColor' => $calendarEvent->backgroundColor ?? '',
+                    'borderColor' => $calendarEvent->borderColor ?? '',
+                    'textColor' => $calendarEvent->textColor ?? '',
                 ];
-
-                if ($calendarEvent->url) {
-                    $eventObject['url'] = $calendarEvent->url;
-                }
 
                 $json[] = $eventObject;
             }
