@@ -1,0 +1,25 @@
+{
+    "name": "ohmediaorg/calendar-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony CalendarBundle",
+    "keywords": ["Calendar"],
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Justin Hoffman",
+            "email": "justin@ohmedia.ca"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "symfony/framework-bundle": "6.4.*|7.4.*"
+    },
+    "autoload": {
+        "psr-4": { "OHMedia\\CalendarBundle\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OHMedia\\CalendarBundle\\Tests\\": "tests/"
+        }
+    }
+}

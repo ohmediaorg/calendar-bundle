@@ -1,0 +1,20 @@
+{% if include_script %}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.21/index.global.min.js'></script>
+{% endif %}
+
+{% set uniq_id = 'calendar_' ~ uniq() %}
+
+<div id="{{ uniq_id }}"></div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('{{ uniq_id }}');
+
+    const calendar = new FullCalendar.Calendar(container, {
+      initialView: 'dayGridMonth'
+      events: "{{ path('calendar_events_json') }}",
+    });
+
+    calendar.render();
+  });
+</script>
