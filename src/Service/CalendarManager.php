@@ -40,6 +40,11 @@ class CalendarManager
         foreach ($this->calendarDataProviders as $calendarDataProvider) {
             $tagIds = $tagsByProvider[$calendarDataProvider::class] ?? [];
 
+            if (!$tagIds && $tags) {
+                // tags are selected, but none for this provider
+                return $json;
+            }
+
             $calendarEvents = $calendarDataProvider->getCalendarEvents($start, $end, $tagIds);
 
             foreach ($calendarEvents as $calendarEvent) {
