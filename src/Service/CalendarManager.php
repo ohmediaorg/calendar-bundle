@@ -17,11 +17,26 @@ class CalendarManager
         \DateTimeImmutable $start,
         \DateTimeImmutable $end,
         \DateTimeZone $timezone,
+        array $tags,
     ): array {
         $json = [];
 
+        $tagsByProvider = [];
+
+        foreach ($tags as $tag) {
+            list($provider, $id) = explode(':', $tag);
+
+            if (!isset($tagsByProvider[$provider])) {
+                $tagsByProvider[$provider] = [];
+            }
+
+            $tagsByProvider[$provider][] = $id;
+        }
+
         foreach ($this->calendarDataProviders as $calendarDataProvider) {
-            $calendarEvents = $calendarDataProvider->getCalendarEvents($start, $end);
+            $tagIds = $tagsByProvider[$calendarDataProvider::class] ?? [];
+
+            $calendarEvents = $calendarDataProvider->getCalendarEvents($start, $end, $tagIds);
 
             foreach ($calendarEvents as $calendarEvent) {
                 $eventObject = [
@@ -52,8 +67,8 @@ class CalendarManager
 
             foreach ($calendarTags as $calendarTag) {
                 $tags[] = [
+                    'id' => $calendarTag->id,
                     'text' => $calendarTag->text,
-                    'className' => $calendarTag->className,
                     'backgroundColor' => $calendarTag->backgroundColor,
                     'borderColor' => $calendarTag->borderColor,
                     'textColor' => $calendarTag->textColor,

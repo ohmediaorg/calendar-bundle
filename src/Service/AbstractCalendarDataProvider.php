@@ -13,6 +13,7 @@ abstract class AbstractCalendarDataProvider
     abstract protected function buildCalendarEvents(
         \DateTimeImmutable $start,
         \DateTimeImmutable $end,
+        array $tagIds,
     ): void;
 
     abstract protected function buildCalendarTags(): void;
@@ -27,14 +28,28 @@ abstract class AbstractCalendarDataProvider
     final public function getCalendarEvents(
         \DateTimeImmutable $start,
         \DateTimeImmutable $end,
+        array $tagIds,
     ): array {
-        $this->buildCalendarEvents($start, $end);
+        $this->buildCalendarEvents($start, $end, $tagIds);
 
         return $this->calendarEvents;
     }
 
-    final protected function addCalendarTag(CalendarTag $calendarTag): static
-    {
+    final protected function addCalendarTag(
+        int|string $id,
+        string $text,
+        string $backgroundColor,
+        string $borderColor,
+        string $textColor,
+    ): static {
+        $calendarTag = new CalendarTag(
+            text: $text,
+            id: static::class.':'.$id,
+            backgroundColor: $backgroundColor,
+            borderColor: $borderColor,
+            textColor: $textColor,
+        );
+
         $this->calendarTags[] = $calendarTag;
 
         return $this;

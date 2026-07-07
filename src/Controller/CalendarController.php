@@ -38,7 +38,9 @@ class CalendarController extends AbstractController
             $end = new \DateTimeImmutable('Y-m-t 23:59:59', $timezone);
         }
 
-        $json = $calendarManager->getEventsJson($start, $end, $timezone);
+        $tags = $request->query->all('tags', []);
+
+        $json = $calendarManager->getEventsJson($start, $end, $timezone, $tags);
 
         return new JsonResponse($json);
     }

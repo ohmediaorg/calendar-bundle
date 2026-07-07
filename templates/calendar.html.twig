@@ -15,36 +15,9 @@
 {% set uniq_id = 'calendar_' ~ uniq() %}
 
 {% if tags|length > 0 %}
-  <div id="{{ uniq_id }}_tags" class="calendar-tags">
-    <button
-      class="calendar-tag calendar-tag--selected"
-      data-calendar-tag="ALL"
-    >
-      All
-    </button>
-
-    {% for tag in tags %}
-      <button
-        class="calendar-tag"
-        style="
-          --calendar-tag-background-color: {{ tag.backgroundColor }};
-          --calendar-tag-border-color: {{ tag.borderColor }};
-          --calendar-tag-color: {{ tag.textColor }};
-        "
-        data-calendar-tag="{{ tag.className }}"
-      >
-        {{ tag.text }}
-      </button>
-    {% endfor %}
-  </div>
-
-  {% for tag in tags %}
-    <style>
-      #{{ uniq_id }}.{{ tag.className }}--hidden .{{ tag.className }} {
-        display: none;
-      }
-    </style>
-  {% endfor %}
+  {% include '@OHMediaCalendar/tags.html.twig' with {
+    tags: tags,
+  } only %}
 {% endif %}
 
 <div id="{{ uniq_id }}"></div>
@@ -55,14 +28,37 @@
 
     const container = document.getElementById('{{ uniq_id }}');
 
+    let otherTags = [];
+
     const calendar = new FullCalendar.Calendar(container, {
       initialView: 'dayGridMonth',
-      events: "{{ path('calendar_events_json') }}",
+      events: {
+        url: "{{ path('calendar_events_json') }}",
+        extraParams: function() {
+          let tags = [];
+
+          otherTags.forEach(otherTag => {
+            if (otherTag.classList.contains(SELECTED)) {
+              tags.push(otherTag.dataset.calendarTag);
+            }
+          });
+
+          let params = {};
+
+          if (tags.length) {
+            tags.forEach(function(tag, i) {
+              params[`tags[${i}]`] = tag;
+            });
+          }
+
+          return params;
+        },
+      },
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,listWeek'
-      }
+      },
     });
 
     calendar.render();
@@ -73,21 +69,18 @@
       return;
     }
 
-    const otherTags = document.querySelectorAll('[data-calendar-tag]:not([data-calendar-tag="ALL"])');
-
-    function allTagClick() {
-      otherTags.forEach(function(otherTag) {
-        otherTag.classList.remove(SELECTED);
-        container.classList.remove(otherTag.dataset.calendarTag + '--hidden');
-      });
-
-      allTag.classList.add(SELECTED);
-    }
+    otherTags = document.querySelectorAll('[data-calendar-tag]:not([data-calendar-tag="ALL"])');
 
     allTag.addEventListener('click', function(e) {
       e.preventDefault();
 
-      allTagClick();
+      otherTags.forEach(function(otherTag) {
+        otherTag.classList.remove(SELECTED);
+      });
+
+      allTag.classList.add(SELECTED);
+
+      calendar.refetchEvents();
     });
 
     otherTags.forEach(function(otherTag) {
@@ -104,15 +97,11 @@
           }
         });
 
-        if (isAnySelected) {
-          otherTags.forEach(function(otherTag) {
-            if (!otherTag.classList.contains(SELECTED)) {
-              container.classList.add(otherTag.dataset.calendarTag + '--hidden');
-            }
-          });
-        } else {
-          allTagClick();
+        if (!isAnySelected) {
+          allTag.classList.add(SELECTED);
         }
+
+        calendar.refetchEvents();
       });
     });
   });

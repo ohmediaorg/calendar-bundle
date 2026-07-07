@@ -1,0 +1,18 @@
+<div class="calendar-tags">
+  <button
+    class="calendar-tag calendar-tag--selected"
+    data-calendar-tag="ALL"
+  >All</button>
+
+  {% for tag in tags %}
+    <button
+      class="calendar-tag"
+      style="
+        --calendar-tag-background-color: {{ tag.backgroundColor }};
+        --calendar-tag-border-color: {{ tag.borderColor }};
+        --calendar-tag-color: {{ tag.textColor }};
+      "
+      data-calendar-tag="{{ tag.id }}"
+    >{{ tag.text }}</button>
+  {% endfor %}
+</div>
