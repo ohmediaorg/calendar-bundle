@@ -25,7 +25,7 @@ class CalendarController extends AbstractController
         $start = $request->query->get('start');
 
         if ($start) {
-            $start = new \DateTimeImmutable($start);
+            $start = new \DateTimeImmutable($start)->setTimezone($timezone);
         } else {
             $start = new \DateTimeImmutable('Y-m-01 00:00:00', $timezone);
         }
@@ -33,7 +33,7 @@ class CalendarController extends AbstractController
         $end = $request->query->get('end');
 
         if ($end) {
-            $end = new \DateTimeImmutable($end);
+            $end = new \DateTimeImmutable($end)->setTimezone($timezone);
         } else {
             $end = new \DateTimeImmutable('Y-m-t 23:59:59', $timezone);
         }
