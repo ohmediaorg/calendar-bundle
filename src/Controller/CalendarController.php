@@ -20,27 +20,27 @@ class CalendarController extends AbstractController
         Request $request,
         Timezone $timezone,
     ): Response {
-        $timezone = new \DateTimeZone($timezone->get());
+        $timezoneLocal = new \DateTimeZone($timezone->get());
 
         $start = $request->query->get('start');
 
         if ($start) {
-            $start = new \DateTimeImmutable($start)->setTimezone($timezone);
+            $start = new \DateTimeImmutable($start);
         } else {
-            $start = new \DateTimeImmutable('Y-m-01 00:00:00', $timezone);
+            $start = new \DateTimeImmutable('Y-m-01 00:00:00', $timezoneLocal);
         }
 
         $end = $request->query->get('end');
 
         if ($end) {
-            $end = new \DateTimeImmutable($end)->setTimezone($timezone);
+            $end = new \DateTimeImmutable($end);
         } else {
-            $end = new \DateTimeImmutable('Y-m-t 23:59:59', $timezone);
+            $end = new \DateTimeImmutable('Y-m-t 23:59:59', $timezoneLocal);
         }
 
         $tags = $request->query->all('tags', []);
 
-        $json = $calendarManager->getEventsJson($start, $end, $timezone, $tags);
+        $json = $calendarManager->getEventsJson($start, $end, $tags);
 
         return new JsonResponse($json);
     }

@@ -16,7 +16,6 @@ class CalendarManager
     public function getEventsJson(
         \DateTimeImmutable $start,
         \DateTimeImmutable $end,
-        \DateTimeZone $timezone,
         array $tags,
     ): array {
         $json = [];
@@ -33,6 +32,11 @@ class CalendarManager
             $tagsByProvider[$provider][] = $id;
         }
 
+        $utc = new \DateTimeZone('UTC');
+
+        $start = $start->setTimezone($utc);
+        $end = $end->setTimezone($utc);
+
         foreach ($this->calendarDataProviders as $calendarDataProvider) {
             $tagIds = $tagsByProvider[$calendarDataProvider::class] ?? [];
 
@@ -41,8 +45,8 @@ class CalendarManager
             foreach ($calendarEvents as $calendarEvent) {
                 $eventObject = [
                     'allDay' => $calendarEvent->allDay,
-                    'start' => $calendarEvent->start->setTimezone($timezone)->format('c'),
-                    'end' => $calendarEvent->end->setTimezone($timezone)->format('c'),
+                    'start' => $calendarEvent->start->format('c'),
+                    'end' => $calendarEvent->end->format('c'),
                     'title' => $calendarEvent->title,
                     'url' => $calendarEvent->url ?? '',
                     'className' => implode(' ', $calendarEvent->classNames),
