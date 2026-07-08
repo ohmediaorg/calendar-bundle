@@ -14,6 +14,8 @@ class CalendarExtension extends AbstractWysiwygExtension
 
     public function __construct(
         private CalendarManager $calendarManager,
+        #[Autowire('%oh_media_timezone.timezone%')]
+        private string $defaultTimezone,
         #[Autowire('%oh_media_calendar.theme%')]
         private string $theme,
     ) {
@@ -47,6 +49,7 @@ class CalendarExtension extends AbstractWysiwygExtension
             'theme' => $theme,
             'palette' => $palette,
             'tags' => $this->calendarManager->getTags(),
+            'timezone' => $this->defaultTimezone,
         ]);
     }
 }
