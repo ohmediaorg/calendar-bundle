@@ -98,7 +98,9 @@
           }
         });
 
-        if (!isAnySelected) {
+        if (isAnySelected) {
+          allTag.classList.remove(SELECTED);
+        } else {
           allTag.classList.add(SELECTED);
         }
 
