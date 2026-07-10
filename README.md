@@ -114,7 +114,6 @@ protected function buildCalendarTags(): void
             // of the buildCalendarEvents function
             id: ...,
             backgroundColor: ...,
-            borderColor: ...,
             textColor: ...,
         );
     }
