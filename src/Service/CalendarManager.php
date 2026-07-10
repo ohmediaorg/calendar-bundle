@@ -55,9 +55,8 @@ class CalendarManager
                     'title' => $calendarEvent->title,
                     'url' => $calendarEvent->url ?? '',
                     'className' => implode(' ', $calendarEvent->classNames),
-                    'backgroundColor' => $calendarEvent->backgroundColor ?? '',
-                    'borderColor' => $calendarEvent->borderColor ?? '',
-                    'textColor' => $calendarEvent->textColor ?? '',
+                    'color' => $calendarEvent->backgroundColor ?? '',
+                    'contrastColor' => $calendarEvent->textColor ?? '',
                 ];
 
                 $json[] = $eventObject;
@@ -79,7 +78,6 @@ class CalendarManager
                     'id' => $calendarTag->id,
                     'text' => $calendarTag->text,
                     'backgroundColor' => $calendarTag->backgroundColor,
-                    'borderColor' => $calendarTag->borderColor,
                     'textColor' => $calendarTag->textColor,
                 ];
             }
