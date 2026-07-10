@@ -39,14 +39,12 @@ abstract class AbstractCalendarDataProvider
         int|string $id,
         string $text,
         string $backgroundColor,
-        string $borderColor,
         string $textColor,
     ): static {
         $calendarTag = new CalendarTag(
             text: $text,
             id: static::class.':'.$id,
             backgroundColor: $backgroundColor,
-            borderColor: $borderColor,
             textColor: $textColor,
         );
 
