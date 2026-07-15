@@ -42,7 +42,7 @@ class CalendarManager
 
             if (!$tagIds && $tags) {
                 // tags are selected, but none for this provider
-                return $json;
+                continue;
             }
 
             $calendarEvents = $calendarDataProvider->getCalendarEvents($start, $end, $tagIds);
