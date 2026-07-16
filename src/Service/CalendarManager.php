@@ -51,7 +51,7 @@ class CalendarManager
                 // allDay events need to exclude the time portion
                 $dateFormat = $calendarEvent->allDay ? 'Y-m-d' : 'c';
 
-                $end = $calendarEvent->end;
+                $end = clone $calendarEvent->end;
 
                 if ($calendarEvent->allDay) {
                     // FC treats "end" as exclusive
