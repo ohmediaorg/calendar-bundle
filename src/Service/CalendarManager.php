@@ -48,10 +48,22 @@ class CalendarManager
             $calendarEvents = $calendarDataProvider->getCalendarEvents($start, $end, $tagIds);
 
             foreach ($calendarEvents as $calendarEvent) {
+                // allDay events need to exclude the time portion
+                $dateFormat = $calendarEvent->allDay ? 'Y-m-d' : 'c';
+
+                $end = $calendarEvent->end;
+
+                if ($calendarEvent->allDay) {
+                    // FC treats "end" as exclusive
+                    // an allDay event from Tue-Thu will not span through Thu
+                    // so it needs to be changed from Tue-Fri
+                    $end = $end->modify('+1 day');
+                }
+
                 $eventObject = [
                     'allDay' => $calendarEvent->allDay,
-                    'start' => $calendarEvent->start->format('c'),
-                    'end' => $calendarEvent->end->format('c'),
+                    'start' => $calendarEvent->start->format($dateFormat),
+                    'end' => $end->format($dateFormat),
                     'title' => $calendarEvent->title,
                     'url' => $calendarEvent->url ?? '',
                     'className' => implode(' ', $calendarEvent->classNames),
