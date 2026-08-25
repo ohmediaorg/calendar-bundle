@@ -48,9 +48,6 @@ class CalendarManager
             $calendarEvents = $calendarDataProvider->getCalendarEvents($start, $end, $tagIds);
 
             foreach ($calendarEvents as $calendarEvent) {
-                // allDay events need to exclude the time portion
-                $dateFormat = $calendarEvent->allDay ? 'Y-m-d' : 'c';
-
                 $end = clone $calendarEvent->end;
 
                 if ($calendarEvent->allDay) {
@@ -62,8 +59,8 @@ class CalendarManager
 
                 $eventObject = [
                     'allDay' => $calendarEvent->allDay,
-                    'start' => $calendarEvent->start->format($dateFormat),
-                    'end' => $end->format($dateFormat),
+                    'start' => $calendarEvent->start->format('c'),
+                    'end' => $end->format('c'),
                     'title' => $calendarEvent->title,
                     'url' => $calendarEvent->url ?? '',
                     'className' => implode(' ', $calendarEvent->classNames),
