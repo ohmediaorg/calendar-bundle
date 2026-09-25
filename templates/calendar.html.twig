@@ -33,6 +33,7 @@
     const calendar = new FullCalendar.Calendar(container, {
       timeZone: '{{ timezone }}',
       initialView: 'dayGridMonth',
+      validRange: {{ valid_range|js }},
       events: {
         url: "{{ path('calendar_events_json') }}",
         extraParams: function() {
@@ -55,11 +56,7 @@
           return params;
         },
       },
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,listWeek'
-      },
+      headerToolbar: {{ header_toolbar|js }},
     });
 
     calendar.render();

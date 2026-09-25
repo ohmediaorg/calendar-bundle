@@ -13,6 +13,44 @@ class CalendarManager
         return $this;
     }
 
+    public function getValidRange(): array
+    {
+        $start = null;
+        $end = null;
+
+        foreach ($this->calendarDataProviders as $calendarDataProvider) {
+            $cdpStart = $calendarDataProvider->getValidRangeStart();
+
+            if ($cdpStart && (!$start || $cdpStart < $start)) {
+                $start = $cdpStart;
+            }
+
+            $cdpEnd = $calendarDataProvider->getValidRangeEnd();
+
+            if ($cdpEnd && (!$end || $cdpEnd > $end)) {
+                $end = $cdpEnd;
+            }
+        }
+
+        $validRange = [];
+
+        $timezone = new \DateTimeZone(date_default_timezone_get());
+
+        if ($start) {
+            $start = $start->setTimezone($timezone);
+
+            $validRange['start'] = $start->format('Y-m-d');
+        }
+
+        if ($end) {
+            $end = $end->setTimezone($timezone);
+
+            $validRange['end'] = $end->format('Y-m-d');
+        }
+
+        return $validRange;
+    }
+
     public function getEventsJson(
         \DateTimeImmutable $start,
         \DateTimeImmutable $end,
