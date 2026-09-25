@@ -39,13 +39,29 @@ class CalendarManager
         if ($start) {
             $start = $start->setTimezone($timezone);
 
-            $validRange['start'] = $start->format('Y-m-d');
+            $startOfMonth = $start->format('Y-m-01');
+
+            if ($start->format('Y-m-d') === $startOfMonth) {
+                $start = $start->modify('-1 month');
+
+                $startOfMonth = $start->format('Y-m-01');
+            }
+
+            $validRange['start'] = $startOfMonth;
         }
 
         if ($end) {
             $end = $end->setTimezone($timezone);
 
-            $validRange['end'] = $end->format('Y-m-d');
+            $endOfMonth = $end->format('Y-m-t');
+
+            if ($end->format('Y-m-d') === $endOfMonth) {
+                $end = $end->modify('+1 month');
+
+                $endOfMonth = $end->format('Y-m-t');
+            }
+
+            $validRange['end'] = $endOfMonth;
         }
 
         return $validRange;
