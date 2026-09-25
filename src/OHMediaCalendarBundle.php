@@ -15,6 +15,20 @@ class OHMediaCalendarBundle extends AbstractBundle
     {
         $definition->rootNode()
             ->children()
+                ->arrayNode('header_toolbar')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->stringNode('left')
+                            ->defaultValue('prev,next today')
+                        ->end()
+                        ->stringNode('center')
+                            ->defaultValue('title')
+                        ->end()
+                        ->stringNode('right')
+                            ->defaultValue('dayGridMonth,timeGridWeek,listWeek')
+                        ->end()
+                    ->end()
+                ->end()
                 ->enumNode('theme')
                     ->values([
                         'monarch-blue',
@@ -55,6 +69,10 @@ class OHMediaCalendarBundle extends AbstractBundle
         ContainerBuilder $containerBuilder,
     ): void {
         $containerConfigurator->import('../config/services.yaml');
+
+        $containerConfigurator->parameters()
+            ->set('oh_media_calendar.header_toolbar', $config['header_toolbar'])
+        ;
 
         $containerConfigurator->parameters()
             ->set('oh_media_calendar.theme', $config['theme'])

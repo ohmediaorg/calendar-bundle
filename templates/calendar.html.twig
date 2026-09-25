@@ -55,11 +55,7 @@
           return params;
         },
       },
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,listWeek'
-      },
+      headerToolbar: {{ header_toolbar|js }},
     });
 
     calendar.render();

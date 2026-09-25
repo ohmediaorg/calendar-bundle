@@ -16,6 +16,8 @@ class CalendarExtension extends AbstractWysiwygExtension
         private CalendarManager $calendarManager,
         #[Autowire('%oh_media_timezone.timezone%')]
         private string $defaultTimezone,
+        #[Autowire('%oh_media_calendar.header_toolbar%')]
+        private array $headerToolbar,
         #[Autowire('%oh_media_calendar.theme%')]
         private string $theme,
     ) {
@@ -46,6 +48,7 @@ class CalendarExtension extends AbstractWysiwygExtension
 
         return $env->render('@OHMediaCalendar/calendar.html.twig', [
             'include_scripts' => $includeScripts,
+            'header_toolbar' => $this->headerToolbar,
             'theme' => $theme,
             'palette' => $palette,
             'tags' => $this->calendarManager->getTags(),
