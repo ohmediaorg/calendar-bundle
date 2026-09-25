@@ -34,11 +34,17 @@ class CalendarManager
 
         $validRange = [];
 
+        $timezone = new \DateTimeZone(date_default_timezone_get());
+
         if ($start) {
+            $start = $start->setTimezone($timezone);
+
             $validRange['start'] = $start->format('Y-m-d');
         }
 
         if ($end) {
+            $end = $end->setTimezone($timezone);
+
             $validRange['end'] = $end->format('Y-m-d');
         }
 
