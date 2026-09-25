@@ -52,6 +52,7 @@ class CalendarExtension extends AbstractWysiwygExtension
             'theme' => $theme,
             'palette' => $palette,
             'tags' => $this->calendarManager->getTags(),
+            'valid_range' => $this->calendarManager->getValidRange(),
             'timezone' => $this->defaultTimezone,
         ]);
     }

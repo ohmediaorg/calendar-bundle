@@ -13,6 +13,38 @@ class CalendarManager
         return $this;
     }
 
+    public function getValidRange(): array
+    {
+        $start = null;
+        $end = null;
+
+        foreach ($this->calendarDataProviders as $calendarDataProvider) {
+            $cdpStart = $calendarDataProvider->getValidRangeStart();
+
+            if ($cdpStart && (!$start || $cdpStart < $start)) {
+                $start = $cdpStart;
+            }
+
+            $cdpEnd = $calendarDataProvider->getValidRangeEnd();
+
+            if ($cdpEnd && (!$end || $cdpEnd > $end)) {
+                $end = $cdpEnd;
+            }
+        }
+
+        $validRange = [];
+
+        if ($start) {
+            $validRange['start'] = $start->format('Y-m-d');
+        }
+
+        if ($end) {
+            $validRange['end'] = $end->format('Y-m-d');
+        }
+
+        return $validRange;
+    }
+
     public function getEventsJson(
         \DateTimeImmutable $start,
         \DateTimeImmutable $end,

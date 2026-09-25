@@ -18,6 +18,16 @@ abstract class AbstractCalendarDataProvider
 
     abstract protected function buildCalendarTags(): void;
 
+    public function getValidRangeStart(): ?\DateTimeInterface
+    {
+        return null;
+    }
+
+    public function getValidRangeEnd(): ?\DateTimeInterface
+    {
+        return null;
+    }
+
     final protected function addCalendarEvent(CalendarEvent $calendarEvent): static
     {
         $this->calendarEvents[] = $calendarEvent;

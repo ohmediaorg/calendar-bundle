@@ -33,6 +33,7 @@
     const calendar = new FullCalendar.Calendar(container, {
       timeZone: '{{ timezone }}',
       initialView: 'dayGridMonth',
+      validRange: {{ valid_range|js }},
       events: {
         url: "{{ path('calendar_events_json') }}",
         extraParams: function() {
